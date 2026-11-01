@@ -10,16 +10,20 @@ dnf -y install xdg-desktop-portal-wlr
 sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
 ## System apps
-dnf -y install libvirt virt-manager qemu-kvm flatpak-builder wlr-randr iotop sysstat lxqt-openssh-askpass lxpolkit parallel just seahorse android-tools iperf3 ktls-utils podman-compose
+dnf -y install libvirt virt-manager qemu-kvm flatpak-builder wlr-randr iotop sysstat lxqt-openssh-askpass lxpolkit parallel just seahorse android-tools iperf3 ktls-utils podman-compose rust-matugen freerdp
+
+## Tailscale
+curl -Lo /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf install tailscale
 
 # User apps
-dnf -y install nautilus kitty mpv gnome-terminal gnome-system-monitor gnome-calculator loupe 
+dnf -y install nautilus kitty mpv gnome-terminal gnome-system-monitor loupe 
 
 # OBS and fully-featured ffmpeg with nonfree components from rpm fusion
 dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 # dnf -y install ffmpeg x264-libs obs-studio obs-studio-plugin-x264 libva-utils --allowerasing
 dnf -y swap ffmpeg-free ffmpeg --allowerasing
-dnf -y install ffmpeg-devel x264-libs obs-studio obs-studio-plugin-x264 libva-utils
+dnf -y install ffmpeg-devel x264-libs libva-utils
 
 # dev tools
 dnf -y install alsa-lib-devel rustfmt cargo clang clang-devel docker-cli docker-cli.x86_64 docker-compose.x86_64 firejail firetools libX11-devel libxkbcommon-devel moby-engine vulkan-loader-devel wayland-devel clippy cmake docker-buildx git nasm  patchelf perf
@@ -68,7 +72,7 @@ dnf -y install bibata-cursor-themes
 # Install Dank Linux shell
 curl --output-dir "/etc/yum.repos.d/" \
   --remote-name "https://copr.fedorainfracloud.org/coprs/avengemedia/dms/repo/fedora-$(rpm -E %fedora)/avengemedia-dms-fedora-$(rpm -E %fedora).repo"
-dnf -y install quickshell dms greetd dms-greeter --allowerasing 
+dnf -y install quickshell dms greetd dms-greeter dux-search dgop dux-calendar dux-files --allowerasing 
 #
 # Install greetd login manager with dank configuration (still needs some work)
 mkdir -p /etc/greetd/
