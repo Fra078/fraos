@@ -70,8 +70,19 @@ dnf -y install bibata-cursor-themes
 # # ABILITARE LE NOTIFICHE: systemctl --user enable --now swaync.service
 
 # Install Dank Linux shell
-curl --output-dir "/etc/yum.repos.d/" \
-  --remote-name "https://copr.fedorainfracloud.org/coprs/avengemedia/dms/repo/fedora-$(rpm -E %fedora)/avengemedia-dms-fedora-$(rpm -E %fedora).repo"
+FEDORA_VERSION="$(rpm -E %fedora)"
+
+# Scarica i file .repo direttamente in /etc/yum.repos.d/
+FEDORA_VERSION="$(rpm -E %fedora)"
+
+# Scarica i file .repo direttamente in /etc/yum.repos.d/
+curl -Lo /etc/yum.repos.d/_copr_duxlabs-dms.repo \
+  "https://copr.fedorainfracloud.org/coprs/duxlabs/dms/repo/fedora-${FEDORA_VERSION}/duxlabs-dms-fedora-${FEDORA_VERSION}.repo"
+
+curl -Lo /etc/yum.repos.d/_copr_duxlabs-dux-repo.repo \
+  "https://copr.fedorainfracloud.org/coprs/duxlabs/dux-repo/repo/fedora-${FEDORA_VERSION}/duxlabs-dux-repo-fedora-${FEDORA_VERSION}.repo"
+#àcurl --output-dir "/etc/yum.repos.d/" \
+##  --remote-name "https://copr.fedorainfracloud.org/coprs/avengemedia/dms/repo/fedora-$(rpm -E %fedora)/avengemedia-dms-fedora-$(rpm -E %fedora).repo"
 dnf -y install quickshell dms greetd dms-greeter dux-search dgop dux-calendar dux-files matugen --allowerasing 
 #
 # Install greetd login manager with dank configuration (still needs some work)
