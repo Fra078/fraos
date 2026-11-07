@@ -11,7 +11,7 @@ sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
 ## System apps
 dnf -y install libvirt virt-manager qemu-kvm flatpak-builder wlr-randr iotop sysstat lxqt-openssh-askpass lxpolkit parallel just seahorse android-tools iperf3 ktls-utils podman-compose freerdp
-
+dnf -y install https://github.com/TibixDev/winboat/releases/download/v0.9.2/winboat-0.9.2-x86_64.rpm
 ## Tailscale
 curl -Lo /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 dnf install tailscale
