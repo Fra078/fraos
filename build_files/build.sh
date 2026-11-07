@@ -5,7 +5,8 @@ set -ouex pipefail
 # dnf -y remove gnome-shell 
 # dnf -y install pipewire xdg-desktop-portal-wlr
 dnf -y install xdg-desktop-portal-wlr
-
+# Prepare target directory and clear potential file conflicts
+mkdir -p /opt && rm -rf /opt/winboat
 ## DNF5 Speedup
 sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
