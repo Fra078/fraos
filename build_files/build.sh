@@ -12,7 +12,7 @@ sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 dnf -y install libvirt virt-manager qemu-kvm flatpak-builder wlr-randr iotop sysstat lxqt-openssh-askpass lxpolkit parallel just seahorse android-tools iperf3 ktls-utils podman-compose freerdp
 ## Tailscale
 curl -Lo /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-dnf install tailscale
+dnf -y install tailscale
 
 # User apps
 dnf -y install nautilus kitty mpv gnome-terminal gnome-system-monitor loupe 
