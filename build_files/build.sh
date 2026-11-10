@@ -5,14 +5,11 @@ set -ouex pipefail
 # dnf -y remove gnome-shell 
 # dnf -y install pipewire xdg-desktop-portal-wlr
 dnf -y install xdg-desktop-portal-wlr
-# Prepare target directory and clear potential file conflicts
-mkdir -p /opt && rm -rf /opt/winboat
 ## DNF5 Speedup
 sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
 ## System apps
 dnf -y install libvirt virt-manager qemu-kvm flatpak-builder wlr-randr iotop sysstat lxqt-openssh-askpass lxpolkit parallel just seahorse android-tools iperf3 ktls-utils podman-compose freerdp
-dnf -y install https://github.com/TibixDev/winboat/releases/download/v0.9.2/winboat-0.9.2-x86_64.rpm
 ## Tailscale
 curl -Lo /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 dnf install tailscale
@@ -25,29 +22,10 @@ dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-
 # dnf -y install ffmpeg x264-libs obs-studio obs-studio-plugin-x264 libva-utils --allowerasing
 dnf -y swap ffmpeg-free ffmpeg --allowerasing
 dnf -y install ffmpeg-devel x264-libs libva-utils
+dnf -y install mscore-fonts
 
 # dev tools
 dnf -y install alsa-lib-devel rustfmt cargo clang clang-devel docker-cli docker-cli.x86_64 docker-compose.x86_64 firejail firetools libX11-devel libxkbcommon-devel moby-engine vulkan-loader-devel wayland-devel clippy cmake docker-buildx git nasm  patchelf perf
-
-# OpenSnitch application firewall (not in Fedora repos): latest upstream release,
-# checked against the SHA-256 digests GitHub publishes for the release assets
-command -v jq || dnf -y install jq
-curl -fsSL https://api.github.com/repos/evilsocket/opensnitch/releases/latest -o /tmp/opensnitch-release.json
-OPENSNITCH_RPMS=()
-for pattern in '^opensnitch-[0-9.]+-1\.x86_64\.rpm$' '^opensnitch-ui-[0-9.]+-1\.noarch\.rpm$'; do
-  read -r name url digest < <(jq -r --arg re "$pattern" \
-    '.assets[] | select(.name | test($re)) | "\(.name) \(.browser_download_url) \(.digest)"' /tmp/opensnitch-release.json)
-  [[ "$digest" == sha256:* ]] || { echo "no sha256 digest for OpenSnitch asset $pattern"; exit 1; }
-  curl -fLo "/tmp/$name" "$url"
-  echo "${digest#sha256:}  /tmp/$name" | sha256sum -c -
-  OPENSNITCH_RPMS+=("/tmp/$name")
-done
-# the daemon's %post runs `systemctl start`, which fails without a running systemd:
-# install its deps normally, then the daemon without scriptlets and enable it by hand
-dnf -y install libnetfilter_queue libnfnetlink
-dnf -y install --setopt=tsflags=noscripts "${OPENSNITCH_RPMS[0]}"
-dnf -y install "${OPENSNITCH_RPMS[1]}"
-systemctl enable opensnitch.service
 
 # Nautilus open any terminal extension
 curl -Lo /etc/yum.repos.d/nautilus-open-any-terminal.repo \
